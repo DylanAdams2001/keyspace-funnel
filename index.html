@@ -1201,6 +1201,17 @@
       btnEl.innerHTML = 'Sending…';
       btnEl.disabled = true;
 
+      // ── Meta CAPI match-quality signals ───────────────────────────────────
+      // fbc: built from fbclid URL param (present when visitor clicks a FB ad)
+      const _fbclid = new URLSearchParams(window.location.search).get('fbclid') || '';
+      const fbc     = _fbclid ? `fb.1.${Date.now()}.${_fbclid}` : '';
+
+      // fbp: Meta Pixel browser cookie (set automatically once Pixel fires)
+      const fbp     = document.cookie.split('; ')
+                        .find(r => r.startsWith('_fbp='))
+                        ?.split('=')[1] || '';
+      // ─────────────────────────────────────────────────────────────────────
+
       const payload = {
         firstName:    fields.fname,
         lastName:     fields.lname,
@@ -1209,6 +1220,9 @@
         capital:      capitalValue || '',
         source:       'Keyspace Funnel — Blueprint',
         pageUrl:      window.location.href,
+        fbc:          fbc,
+        fbp:          fbp,
+        userAgent:    navigator.userAgent,
       };
 
       try {
