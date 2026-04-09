@@ -302,6 +302,9 @@
     }
     .field::placeholder { color: #bbb; }
     .field:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(26,26,26,0.06); }
+    .field.error { border-color: #e02020; box-shadow: 0 0 0 3px rgba(224,32,32,0.08); }
+    .field-error-msg { font-size: 11px; color: #e02020; margin-top: 4px; display: none; }
+    .field.error + .field-error-msg { display: block; }
 
     /* Buttons */
     .btn-next {
@@ -680,7 +683,8 @@
               <input class="field" type="text"  id="fname"  placeholder="First name"    autocomplete="given-name"  />
               <input class="field" type="text"  id="lname"  placeholder="Last name"     autocomplete="family-name" />
               <input class="field" type="email" id="email"  placeholder="Email address" autocomplete="email"       />
-              <input class="field" type="tel"   id="phone"  placeholder="Phone number"  autocomplete="tel"         />
+              <input class="field" type="tel"   id="phone"  placeholder="Australian mobile or landline" autocomplete="tel" />
+              <span class="field-error-msg">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
             </div>
             <button class="btn-next" id="btn-step2">
               SEND MY FREE BLUEPRINT
@@ -1103,7 +1107,8 @@
               <input class="field" type="text"  id="fname-b" placeholder="First name"    autocomplete="given-name"  />
               <input class="field" type="text"  id="lname-b" placeholder="Last name"     autocomplete="family-name" />
               <input class="field" type="email" id="email-b" placeholder="Email address" autocomplete="email"       />
-              <input class="field" type="tel"   id="phone-b" placeholder="Phone number"  autocomplete="tel"         />
+              <input class="field" type="tel"   id="phone-b" placeholder="Australian mobile or landline" autocomplete="tel" />
+              <span class="field-error-msg">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
             </div>
             <button class="btn-next" id="btn-stepb2">
               SEND MY FREE BLUEPRINT
@@ -1188,10 +1193,28 @@
     function getVal(id) { return document.getElementById(id).value.trim(); }
 
     function validate(fnameId, lnameId, emailId, phoneId) {
+      const fields = [fnameId, lnameId, emailId, phoneId];
+      fields.forEach(id => document.getElementById(id).classList.remove('error'));
+
       const fname = getVal(fnameId), lname = getVal(lnameId);
       const email = getVal(emailId), phone = getVal(phoneId);
-      if (!fname || !lname || !email || !phone) { alert('Please fill in all fields.'); return null; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return null; }
+
+      // Strip spaces/dashes/parens then check AU format:
+      // mobile 04XXXXXXXX, landline 0[2378]XXXXXXXX, or intl +614XXXXXXXX
+      const stripped = phone.replace(/[\s\-().]/g, '');
+      const auPhone  = /^(\+?61|0)(4\d{8}|[2378]\d{8})$/.test(stripped);
+
+      let valid = true;
+      if (!fname)    { document.getElementById(fnameId).classList.add('error'); valid = false; }
+      if (!lname)    { document.getElementById(lnameId).classList.add('error'); valid = false; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById(emailId).classList.add('error'); valid = false;
+      }
+      if (!phone || !auPhone) {
+        document.getElementById(phoneId).classList.add('error'); valid = false;
+      }
+
+      if (!valid) return null;
       return { fname, lname, email, phone };
     }
 
