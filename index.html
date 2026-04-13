@@ -305,6 +305,7 @@
     .field.error { border-color: #e02020; box-shadow: 0 0 0 3px rgba(224,32,32,0.08); }
     .field-error-msg { font-size: 11px; color: #e02020; margin-top: 4px; display: none; }
     .field.error + .field-error-msg { display: block; }
+    .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; }
 
     /* Buttons */
     .btn-next {
@@ -680,6 +681,7 @@
             <div class="step-label">Step 2 of 2</div>
             <div class="quiz-q">Where should we send your free blueprint?</div>
             <div class="field-group">
+              <input class="hp-field" type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off" />
               <input class="field" type="text"  id="fname"  placeholder="First name"    autocomplete="given-name"  />
               <input class="field" type="text"  id="lname"  placeholder="Last name"     autocomplete="family-name" />
               <input class="field" type="email" id="email"  placeholder="Email address" autocomplete="email"       />
@@ -1104,6 +1106,7 @@
             <div class="step-label">Step 2 of 2</div>
             <div class="quiz-q">Where should we send your free blueprint?</div>
             <div class="field-group">
+              <input class="hp-field" type="text" id="hp_website_b" name="website_b" tabindex="-1" autocomplete="off" />
               <input class="field" type="text"  id="fname-b" placeholder="First name"    autocomplete="given-name"  />
               <input class="field" type="text"  id="lname-b" placeholder="Last name"     autocomplete="family-name" />
               <input class="field" type="email" id="email-b" placeholder="Email address" autocomplete="email"       />
@@ -1192,7 +1195,10 @@
 
     function getVal(id) { return document.getElementById(id).value.trim(); }
 
-    function validate(fnameId, lnameId, emailId, phoneId) {
+    function validate(fnameId, lnameId, emailId, phoneId, hpId) {
+      // Honeypot check — bots fill hidden fields, real users never do
+      if (document.getElementById(hpId).value) return null;
+
       const fields = [fnameId, lnameId, emailId, phoneId];
       fields.forEach(id => document.getElementById(id).classList.remove('error'));
 
@@ -1266,7 +1272,7 @@
       optionContainerId: 'options-step1', nextBtn1Id: 'btn-step1', nextBtn2Id: 'btn-step2',
       backBtnId: 'btn-back', step1Id: 'step-1', step2Id: 'step-2', progressId: 'progress',
       submitCallback() {
-        const fields = validate('fname', 'lname', 'email', 'phone');
+        const fields = validate('fname', 'lname', 'email', 'phone', 'hp_website');
         if (!fields) return;
         const capital = document.querySelector('#options-step1 input[type="radio"]:checked')?.value || '';
         submitToGHL(fields, capital, document.getElementById('btn-step2'));
@@ -1277,7 +1283,7 @@
       optionContainerId: 'options-stepb1', nextBtn1Id: 'btn-stepb1', nextBtn2Id: 'btn-stepb2',
       backBtnId: 'btn-backb', step1Id: 'step-b1', step2Id: 'step-b2', progressId: 'progress-b',
       submitCallback() {
-        const fields = validate('fname-b', 'lname-b', 'email-b', 'phone-b');
+        const fields = validate('fname-b', 'lname-b', 'email-b', 'phone-b', 'hp_website_b');
         if (!fields) return;
         const capital = document.querySelector('#options-stepb1 input[type="radio"]:checked')?.value || '';
         submitToGHL(fields, capital, document.getElementById('btn-stepb2'));
