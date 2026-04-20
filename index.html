@@ -22,7 +22,7 @@
   /></noscript>
   <!-- End Meta Pixel Code -->
   <!-- reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z"></script>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z"></script>
   <link rel="icon" href="brand_assets copy/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1237,7 +1237,7 @@
       // Token is passed to GHL for optional server-side verification later.
       let recaptchaToken = '';
       try {
-        recaptchaToken = await grecaptcha.execute('6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z', { action: 'submit' });
+        recaptchaToken = await grecaptcha.enterprise.execute('6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z', { action: 'submit' });
         if (!recaptchaToken) {
           btnEl.innerHTML = originalText;
           btnEl.disabled = false;
