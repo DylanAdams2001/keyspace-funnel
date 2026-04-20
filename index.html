@@ -1237,11 +1237,16 @@
       // Token is passed to GHL for optional server-side verification later.
       let recaptchaToken = '';
       try {
-        recaptchaToken = await grecaptcha.enterprise.execute('6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z', { action: 'submit' });
+        await new Promise((resolve) => {
+          grecaptcha.enterprise.ready(async () => {
+            recaptchaToken = await grecaptcha.enterprise.execute('6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z', { action: 'submit' });
+            resolve();
+          });
+        });
         if (!recaptchaToken) {
           btnEl.innerHTML = originalText;
           btnEl.disabled = false;
-          return; // silently block if no token returned
+          return;
         }
       } catch (e) {
         console.warn('reCAPTCHA error:', e);
