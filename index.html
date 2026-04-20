@@ -22,7 +22,7 @@
   /></noscript>
   <!-- End Meta Pixel Code -->
   <!-- reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Lfh7rQsAAAAABb9CyR6O6BQi_cOJBRfkveOKpIM"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z"></script>
   <link rel="icon" href="brand_assets copy/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1232,22 +1232,20 @@
       btnEl.innerHTML = 'Verifying…';
       btnEl.disabled = true;
 
-      // ── reCAPTCHA v3 check ────────────────────────────────────────────────
+      // ── reCAPTCHA v3 ─────────────────────────────────────────────────────
+      // Requires JS execution + Google behavioural analysis to generate a token.
+      // Token is passed to GHL for optional server-side verification later.
+      let recaptchaToken = '';
       try {
-        const token = await grecaptcha.execute('6Lfh7rQsAAAAABb9CyR6O6BQi_cOJBRfkveOKpIM', { action: 'submit' });
-        // Decode the score from the JWT payload (middle segment)
-        const payload64 = token.split('.')[1];
-        if (payload64) {
-          const data = JSON.parse(atob(payload64.replace(/-/g,'+').replace(/_/g,'/')));
-          if (data.score !== undefined && data.score < 0.5) {
-            btnEl.innerHTML = originalText;
-            btnEl.disabled = false;
-            return; // silently block — don't tell bots they failed
-          }
+        recaptchaToken = await grecaptcha.execute('6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z', { action: 'submit' });
+        if (!recaptchaToken) {
+          btnEl.innerHTML = originalText;
+          btnEl.disabled = false;
+          return; // silently block if no token returned
         }
       } catch (e) {
-        // If reCAPTCHA fails to load, allow through — don't block real users
         console.warn('reCAPTCHA error:', e);
+        // Allow through if reCAPTCHA fails to load — don't block real users
       }
       // ─────────────────────────────────────────────────────────────────────
 
@@ -1272,6 +1270,7 @@
         capital:      capitalValue || '',
         source:       'Keyspace Funnel — Blueprint',
         pageUrl:      window.location.href,
+        recaptchaToken: recaptchaToken,
         fbc:          fbc,
         fbp:          fbp,
         userAgent:    navigator.userAgent,
