@@ -638,17 +638,17 @@
     <div class="wrap">
       <p class="hero-eyebrow">No cost · Instant access</p>
       <h1>Download Your Free Rooming&nbsp;House Investment&nbsp;Blueprint!</h1>
-      <p class="hero-sub">Answer 2 quick questions and we'll send your personalised blueprint immediately.</p>
+      <p class="hero-sub">Answer 4 quick questions and we'll send your personalised blueprint immediately.</p>
 
       <div class="quiz-card">
         <div class="progress-bar">
-          <div class="progress-fill" id="progress" style="width: 50%"></div>
+          <div class="progress-fill" id="progress" style="width: 25%"></div>
         </div>
 
         <!-- Step 1 -->
         <div class="quiz-step active" id="step-1">
           <div class="quiz-inner">
-            <div class="step-label">Step 1 of 2</div>
+            <div class="step-label">Step 1 of 4</div>
             <div class="quiz-q">How much capital do you currently have available to invest?</div>
             <div class="options" id="options-step1">
               <label class="option-label" data-value="under-100k">
@@ -693,10 +693,75 @@
           </div>
         </div>
 
-        <!-- Step 2 -->
+        <!-- Step 2 — Timeline -->
         <div class="quiz-step" id="step-2">
           <div class="quiz-inner">
-            <div class="step-label">Step 2 of 2</div>
+            <div class="step-label">Step 2 of 4</div>
+            <div class="quiz-q">What is your investment timeline?</div>
+            <div class="options" id="options-step2">
+              <label class="option-label" data-value="0-3months">
+                <input type="radio" name="timeline" value="0-3months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Within 3 months</span>
+              </label>
+              <label class="option-label" data-value="3-6months">
+                <input type="radio" name="timeline" value="3-6months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">3 – 6 months</span>
+              </label>
+              <label class="option-label" data-value="6-12months">
+                <input type="radio" name="timeline" value="6-12months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">6 – 12 months</span>
+              </label>
+              <label class="option-label" data-value="12months-plus">
+                <input type="radio" name="timeline" value="12months-plus" />
+                <div class="radio-dot"></div>
+                <span class="option-text">12 months+</span>
+              </label>
+            </div>
+            <button class="btn-next" id="btn-step2">
+              NEXT
+              <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
+            </button>
+            <button class="btn-back" id="btn-back2">← Go back</button>
+          </div>
+        </div>
+
+        <!-- Step 3 — Goal -->
+        <div class="quiz-step" id="step-3">
+          <div class="quiz-inner">
+            <div class="step-label">Step 3 of 4</div>
+            <div class="quiz-q">What is your primary investment goal?</div>
+            <div class="options" id="options-step3">
+              <label class="option-label" data-value="cashflow">
+                <input type="radio" name="goal" value="cashflow" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Cash flow</span>
+              </label>
+              <label class="option-label" data-value="equity">
+                <input type="radio" name="goal" value="equity" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Equity growth</span>
+              </label>
+              <label class="option-label" data-value="both">
+                <input type="radio" name="goal" value="both" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Both</span>
+              </label>
+            </div>
+            <button class="btn-next" id="btn-step3">
+              NEXT
+              <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
+            </button>
+            <button class="btn-back" id="btn-back3">← Go back</button>
+          </div>
+        </div>
+
+        <!-- Step 4 — Contact -->
+        <div class="quiz-step" id="step-4">
+          <div class="quiz-inner">
+            <div class="step-label">Step 4 of 4</div>
             <div class="quiz-q">Where should we send your free blueprint?</div>
             <div class="field-group">
               <input class="hp-field" type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off" />
@@ -706,11 +771,11 @@
               <input class="field" type="tel"   id="phone"  placeholder="Australian mobile or landline" autocomplete="tel" />
               <span class="field-error-msg">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
             </div>
-            <button class="btn-next" id="btn-step2">
+            <button class="btn-next" id="btn-step4">
               SEND MY FREE BLUEPRINT
               <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
             </button>
-            <button class="btn-back" id="btn-back">← Go back</button>
+            <button class="btn-back" id="btn-back4">← Go back</button>
             <p class="form-note">🔒 Your details are 100% private. No spam, ever.</p>
           </div>
         </div>
@@ -1085,11 +1150,11 @@
 
       <div class="quiz-card reveal">
         <div class="progress-bar">
-          <div class="progress-fill" id="progress-b" style="width: 50%"></div>
+          <div class="progress-fill" id="progress-b" style="width: 25%"></div>
         </div>
         <div class="quiz-step active" id="step-b1">
           <div class="quiz-inner">
-            <div class="step-label">Step 1 of 2</div>
+            <div class="step-label">Step 1 of 4</div>
             <div class="quiz-q">How much capital do you currently have available to invest?</div>
             <div class="options" id="options-stepb1">
               <label class="option-label" data-value="under-100k">
@@ -1133,9 +1198,75 @@
           </div>
         </div>
 
+        <!-- Step B2 — Timeline -->
         <div class="quiz-step" id="step-b2">
           <div class="quiz-inner">
-            <div class="step-label">Step 2 of 2</div>
+            <div class="step-label">Step 2 of 4</div>
+            <div class="quiz-q">What is your investment timeline?</div>
+            <div class="options" id="options-stepb2">
+              <label class="option-label" data-value="0-3months">
+                <input type="radio" name="timeline-b" value="0-3months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Within 3 months</span>
+              </label>
+              <label class="option-label" data-value="3-6months">
+                <input type="radio" name="timeline-b" value="3-6months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">3 – 6 months</span>
+              </label>
+              <label class="option-label" data-value="6-12months">
+                <input type="radio" name="timeline-b" value="6-12months" />
+                <div class="radio-dot"></div>
+                <span class="option-text">6 – 12 months</span>
+              </label>
+              <label class="option-label" data-value="12months-plus">
+                <input type="radio" name="timeline-b" value="12months-plus" />
+                <div class="radio-dot"></div>
+                <span class="option-text">12 months+</span>
+              </label>
+            </div>
+            <button class="btn-next" id="btn-stepb2">
+              NEXT
+              <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
+            </button>
+            <button class="btn-back" id="btn-backb2">← Go back</button>
+          </div>
+        </div>
+
+        <!-- Step B3 — Goal -->
+        <div class="quiz-step" id="step-b3">
+          <div class="quiz-inner">
+            <div class="step-label">Step 3 of 4</div>
+            <div class="quiz-q">What is your primary investment goal?</div>
+            <div class="options" id="options-stepb3">
+              <label class="option-label" data-value="cashflow">
+                <input type="radio" name="goal-b" value="cashflow" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Cash flow</span>
+              </label>
+              <label class="option-label" data-value="equity">
+                <input type="radio" name="goal-b" value="equity" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Equity growth</span>
+              </label>
+              <label class="option-label" data-value="both">
+                <input type="radio" name="goal-b" value="both" />
+                <div class="radio-dot"></div>
+                <span class="option-text">Both</span>
+              </label>
+            </div>
+            <button class="btn-next" id="btn-stepb3">
+              NEXT
+              <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
+            </button>
+            <button class="btn-back" id="btn-backb3">← Go back</button>
+          </div>
+        </div>
+
+        <!-- Step B4 — Contact -->
+        <div class="quiz-step" id="step-b4">
+          <div class="quiz-inner">
+            <div class="step-label">Step 4 of 4</div>
             <div class="quiz-q">Where should we send your free blueprint?</div>
             <div class="field-group">
               <input class="hp-field" type="text" id="hp_website_b" name="website_b" tabindex="-1" autocomplete="off" />
@@ -1145,11 +1276,11 @@
               <input class="field" type="tel"   id="phone-b" placeholder="Australian mobile or landline" autocomplete="tel" />
               <span class="field-error-msg">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
             </div>
-            <button class="btn-next" id="btn-stepb2">
+            <button class="btn-next" id="btn-stepb4">
               SEND MY FREE BLUEPRINT
               <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
             </button>
-            <button class="btn-back" id="btn-backb">← Go back</button>
+            <button class="btn-back" id="btn-backb4">← Go back</button>
             <p class="form-note">🔒 Your details are 100% private. No spam, ever.</p>
           </div>
         </div>
@@ -1182,55 +1313,69 @@
     document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
 
     /* ── Quiz logic ─────────────────────────────────── */
-    function initQuiz({ optionContainerId, nextBtn1Id, nextBtn2Id, backBtnId, step1Id, step2Id, stepDqId, backDqBtnId, progressId, submitCallback }) {
-      const optionContainer = document.getElementById(optionContainerId);
-      const btnNext1 = document.getElementById(nextBtn1Id);
-      const btnNext2 = document.getElementById(nextBtn2Id);
-      const btnBack  = document.getElementById(backBtnId);
-      const btnBackDq = document.getElementById(backDqBtnId);
-      const step1    = document.getElementById(step1Id);
-      const step2    = document.getElementById(step2Id);
-      const stepDq   = document.getElementById(stepDqId);
-      const progress = document.getElementById(progressId);
+    function initQuiz({ cap1Id, opt1Id, timeline2Id, opt2Id, goal3Id, opt3Id, contact4Id, stepDqId,
+                         btn1Id, btn2Id, btn3Id, btn4Id,
+                         back2Id, back3Id, back4Id, backDqId,
+                         progressId, submitCallback }) {
+      const cap1    = document.getElementById(cap1Id);
+      const tl2     = document.getElementById(timeline2Id);
+      const goal3   = document.getElementById(goal3Id);
+      const contact4= document.getElementById(contact4Id);
+      const dq      = document.getElementById(stepDqId);
+      const progress= document.getElementById(progressId);
 
-      optionContainer.querySelectorAll('.option-label').forEach(label => {
-        label.addEventListener('click', () => {
-          optionContainer.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
-          label.classList.add('selected');
-          label.querySelector('input').checked = true;
+      function bindOptions(containerId) {
+        document.getElementById(containerId).querySelectorAll('.option-label').forEach(label => {
+          label.addEventListener('click', () => {
+            document.getElementById(containerId).querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+            label.classList.add('selected');
+            label.querySelector('input').checked = true;
+          });
         });
-      });
+      }
 
-      btnNext1.addEventListener('click', () => {
-        const checked = optionContainer.querySelector('input[type="radio"]:checked');
+      function requireSelection(containerId, btn) {
+        const checked = document.getElementById(containerId).querySelector('input[type="radio"]:checked');
         if (!checked) {
-          btnNext1.style.animation = 'none';
-          btnNext1.offsetHeight;
-          btnNext1.style.animation = 'shake 0.3s ease';
-          return;
+          btn.style.animation = 'none'; btn.offsetHeight; btn.style.animation = 'shake 0.3s ease';
+          return null;
         }
-        step1.classList.remove('active');
-        if (checked.value === 'under-100k') {
-          stepDq.classList.add('active');
-        } else {
-          step2.classList.add('active');
-          progress.style.width = '100%';
-        }
+        return checked.value;
+      }
+
+      function go(hide, show, pct) {
+        hide.classList.remove('active');
+        show.classList.add('active');
+        if (pct) progress.style.width = pct;
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      bindOptions(opt1Id);
+      bindOptions(opt2Id);
+      bindOptions(opt3Id);
+
+      document.getElementById(btn1Id).addEventListener('click', () => {
+        const val = requireSelection(opt1Id, document.getElementById(btn1Id));
+        if (!val) return;
+        go(cap1, val === 'under-100k' ? dq : tl2, val === 'under-100k' ? null : '50%');
       });
 
-      btnBack.addEventListener('click', () => {
-        step2.classList.remove('active');
-        step1.classList.add('active');
-        progress.style.width = '50%';
+      document.getElementById(btn2Id).addEventListener('click', () => {
+        if (!requireSelection(opt2Id, document.getElementById(btn2Id))) return;
+        go(tl2, goal3, '75%');
       });
 
-      btnBackDq.addEventListener('click', () => {
-        stepDq.classList.remove('active');
-        step1.classList.add('active');
+      document.getElementById(btn3Id).addEventListener('click', () => {
+        if (!requireSelection(opt3Id, document.getElementById(btn3Id))) return;
+        go(goal3, contact4, '100%');
       });
 
-      btnNext2.addEventListener('click', submitCallback);
+      document.getElementById(btn4Id).addEventListener('click', submitCallback);
+
+      document.getElementById(back2Id).addEventListener('click', () => go(tl2, cap1, '25%'));
+      document.getElementById(back3Id).addEventListener('click', () => go(goal3, tl2, '50%'));
+      document.getElementById(back4Id).addEventListener('click', () => go(contact4, goal3, '75%'));
+      document.getElementById(backDqId).addEventListener('click', () => { dq.classList.remove('active'); cap1.classList.add('active'); });
     }
 
     // ── PASTE YOUR GHL INBOUND WEBHOOK URL HERE ──────
@@ -1268,7 +1413,7 @@
       return { fname, lname, email, phone };
     }
 
-    async function submitToGHL(fields, capitalValue, btnEl) {
+    async function submitToGHL(fields, capitalValue, btnEl, extra = {}) {
       // Show loading state
       const originalText = btnEl.innerHTML;
       btnEl.innerHTML = 'Verifying…';
@@ -1315,6 +1460,8 @@
         email:        fields.email,
         phone:        fields.phone,
         capital:      capitalValue || '',
+        timeline:     extra.timeline || '',
+        goal:         extra.goal || '',
         source:       'Keyspace Funnel — Blueprint',
         pageUrl:      window.location.href,
         recaptchaToken: recaptchaToken,
@@ -1338,26 +1485,38 @@
     }
 
     initQuiz({
-      optionContainerId: 'options-step1', nextBtn1Id: 'btn-step1', nextBtn2Id: 'btn-step2',
-      backBtnId: 'btn-back', stepDqId: 'step-dq', backDqBtnId: 'btn-back-dq',
-      step1Id: 'step-1', step2Id: 'step-2', progressId: 'progress',
+      cap1Id: 'step-1', opt1Id: 'options-step1',
+      timeline2Id: 'step-2', opt2Id: 'options-step2',
+      goal3Id: 'step-3', opt3Id: 'options-step3',
+      contact4Id: 'step-4', stepDqId: 'step-dq',
+      btn1Id: 'btn-step1', btn2Id: 'btn-step2', btn3Id: 'btn-step3', btn4Id: 'btn-step4',
+      back2Id: 'btn-back2', back3Id: 'btn-back3', back4Id: 'btn-back4', backDqId: 'btn-back-dq',
+      progressId: 'progress',
       submitCallback() {
         const fields = validate('fname', 'lname', 'email', 'phone', 'hp_website');
         if (!fields) return;
-        const capital = document.querySelector('#options-step1 input[type="radio"]:checked')?.value || '';
-        submitToGHL(fields, capital, document.getElementById('btn-step2'));
+        const capital   = document.querySelector('#options-step1 input[type="radio"]:checked')?.value || '';
+        const timeline  = document.querySelector('#options-step2 input[type="radio"]:checked')?.value || '';
+        const goal      = document.querySelector('#options-step3 input[type="radio"]:checked')?.value || '';
+        submitToGHL(fields, capital, document.getElementById('btn-step4'), { timeline, goal });
       }
     });
 
     initQuiz({
-      optionContainerId: 'options-stepb1', nextBtn1Id: 'btn-stepb1', nextBtn2Id: 'btn-stepb2',
-      backBtnId: 'btn-backb', stepDqId: 'step-dqb', backDqBtnId: 'btn-back-dqb',
-      step1Id: 'step-b1', step2Id: 'step-b2', progressId: 'progress-b',
+      cap1Id: 'step-b1', opt1Id: 'options-stepb1',
+      timeline2Id: 'step-b2', opt2Id: 'options-stepb2',
+      goal3Id: 'step-b3', opt3Id: 'options-stepb3',
+      contact4Id: 'step-b4', stepDqId: 'step-dqb',
+      btn1Id: 'btn-stepb1', btn2Id: 'btn-stepb2', btn3Id: 'btn-stepb3', btn4Id: 'btn-stepb4',
+      back2Id: 'btn-backb2', back3Id: 'btn-backb3', back4Id: 'btn-backb4', backDqId: 'btn-back-dqb',
+      progressId: 'progress-b',
       submitCallback() {
         const fields = validate('fname-b', 'lname-b', 'email-b', 'phone-b', 'hp_website_b');
         if (!fields) return;
-        const capital = document.querySelector('#options-stepb1 input[type="radio"]:checked')?.value || '';
-        submitToGHL(fields, capital, document.getElementById('btn-stepb2'));
+        const capital   = document.querySelector('#options-stepb1 input[type="radio"]:checked')?.value || '';
+        const timeline  = document.querySelector('#options-stepb2 input[type="radio"]:checked')?.value || '';
+        const goal      = document.querySelector('#options-stepb3 input[type="radio"]:checked')?.value || '';
+        submitToGHL(fields, capital, document.getElementById('btn-stepb4'), { timeline, goal });
       }
     });
 
