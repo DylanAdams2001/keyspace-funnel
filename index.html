@@ -333,6 +333,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .btn-next:active { transform: scale(0.98); opacity: 0.9; animation: none; }
+    .btn-next:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
     .btn-next svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     .btn-back {
@@ -1324,25 +1325,6 @@
       const dq      = document.getElementById(stepDqId);
       const progress= document.getElementById(progressId);
 
-      function bindOptions(containerId) {
-        document.getElementById(containerId).querySelectorAll('.option-label').forEach(label => {
-          label.addEventListener('click', () => {
-            document.getElementById(containerId).querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
-            label.classList.add('selected');
-            label.querySelector('input').checked = true;
-          });
-        });
-      }
-
-      function requireSelection(containerId, btn) {
-        const checked = document.getElementById(containerId).querySelector('input[type="radio"]:checked');
-        if (!checked) {
-          btn.style.animation = 'none'; btn.offsetHeight; btn.style.animation = 'shake 0.3s ease';
-          return null;
-        }
-        return checked.value;
-      }
-
       function go(hide, show, pct) {
         hide.classList.remove('active');
         show.classList.add('active');
@@ -1350,25 +1332,47 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      bindOptions(opt1Id);
-      bindOptions(opt2Id);
-      bindOptions(opt3Id);
+      const btn1El = document.getElementById(btn1Id);
+      const btn2El = document.getElementById(btn2Id);
+      const btn3El = document.getElementById(btn3Id);
 
-      document.getElementById(btn1Id).addEventListener('click', () => {
-        const val = requireSelection(opt1Id, document.getElementById(btn1Id));
+      btn1El.disabled = true;
+      btn2El.disabled = true;
+      btn3El.disabled = true;
+
+      function advance1() {
+        const val = document.getElementById(opt1Id).querySelector('input[type="radio"]:checked')?.value;
         if (!val) return;
         go(cap1, val === 'under-100k' ? dq : tl2, val === 'under-100k' ? null : '50%');
-      });
-
-      document.getElementById(btn2Id).addEventListener('click', () => {
-        if (!requireSelection(opt2Id, document.getElementById(btn2Id))) return;
+      }
+      function advance2() {
+        if (!document.getElementById(opt2Id).querySelector('input[type="radio"]:checked')) return;
         go(tl2, goal3, '75%');
-      });
-
-      document.getElementById(btn3Id).addEventListener('click', () => {
-        if (!requireSelection(opt3Id, document.getElementById(btn3Id))) return;
+      }
+      function advance3() {
+        if (!document.getElementById(opt3Id).querySelector('input[type="radio"]:checked')) return;
         go(goal3, contact4, '100%');
-      });
+      }
+
+      function bindOptions(containerId, btnEl, advanceFn) {
+        document.getElementById(containerId).querySelectorAll('.option-label').forEach(label => {
+          label.addEventListener('click', () => {
+            document.getElementById(containerId).querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+            label.classList.add('selected');
+            label.querySelector('input').checked = true;
+            btnEl.disabled = false;
+            setTimeout(advanceFn, 450);
+          });
+        });
+      }
+
+      bindOptions(opt1Id, btn1El, advance1);
+      bindOptions(opt2Id, btn2El, advance2);
+      bindOptions(opt3Id, btn3El, advance3);
+
+      btn1El.addEventListener('click', advance1);
+      btn2El.addEventListener('click', advance2);
+      btn3El.addEventListener('click', advance3);
 
       document.getElementById(btn4Id).addEventListener('click', submitCallback);
 
