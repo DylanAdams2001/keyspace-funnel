@@ -978,6 +978,11 @@
       }
     }
 
+    function newEventId() {
+      if (window.crypto?.randomUUID) return crypto.randomUUID();
+      return 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    }
+
     async function submitToGHL(fields, btnEl, { capital, timeline, goal, nurture, redirect }) {
       const originalText = btnEl.innerHTML;
       btnEl.innerHTML = 'Verifying…';
@@ -990,6 +995,11 @@
       const _fbclid = new URLSearchParams(window.location.search).get('fbclid') || '';
       const fbc = _fbclid ? `fb.1.${Date.now()}.${_fbclid}` : '';
       const fbp = document.cookie.split('; ').find(r => r.startsWith('_fbp='))?.split('=')[1] || '';
+
+      // Shared ID so a browser-side Lead event and any server-side (CAPI) Lead
+      // event GoHighLevel sends for the same submission dedupe into one
+      // conversion in Meta, instead of being missed or double-counted.
+      const eventId = newEventId();
 
       const payload = {
         firstName: fields.fname,
@@ -1004,6 +1014,7 @@
         pageUrl:   window.location.href,
         recaptchaToken,
         fbc, fbp,
+        eventId,
         userAgent: navigator.userAgent,
       };
 
@@ -1013,8 +1024,18 @@
         console.warn('Webhook error:', err);
       }
 
+      // Browser-side Lead event — fires regardless of whether the CRM's own
+      // integration reports this conversion to Meta, so the ad always gets
+      // a signal for every real submission.
+      try {
+        fbq('track', 'Lead', { content_name: 'Rooming House Blueprint', currency: 'AUD', value: 0 }, { eventID: eventId });
+      } catch (err) {
+        console.warn('Pixel Lead event error:', err);
+      }
+
       btnEl.innerHTML = originalText;
-      window.location.href = redirect;
+      // Small delay so the pixel's beacon has a moment to leave before navigation.
+      setTimeout(() => { window.location.href = redirect; }, 150);
     }
 
     document.getElementById('btn-step4').addEventListener('click', () => {
