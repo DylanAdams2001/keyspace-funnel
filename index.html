@@ -1081,7 +1081,11 @@
         els.forEach(el => { if (!el.classList.contains('visible') && el.getBoundingClientRect().top < vh) el.classList.add('visible'); });
       }
       window.addEventListener('scroll', sweep, { passive: true });
-      window.addEventListener('load', () => setTimeout(sweep, 1500));
+      // Also poll once a second until nothing is left hidden, then stop.
+      const timer = setInterval(() => {
+        sweep();
+        if (![...els].some(el => !el.classList.contains('visible'))) clearInterval(timer);
+      }, 1000);
     })();
   </script>
 </body>
