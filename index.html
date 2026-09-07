@@ -586,24 +586,17 @@
           </div>
         </div>
 
-        <!-- Step DQ — under $100k: still capture the lead for nurture -->
+        <!-- Step DQ — under $100k: not captured as a lead, sent straight to the blueprint -->
         <div class="quiz-step" id="step-dq">
           <div class="quiz-inner">
-            <div class="step-label"><span>Almost there</span></div>
-            <div class="quiz-q">You're a little early, but the blueprint will show you exactly what to build toward.</div>
-            <p class="dq-text">Our projects typically need $200k+ in available capital or equity. Tell us where to send the blueprint and we'll keep you posted on how investors get there.</p>
-            <div class="field-group">
-              <input class="hp-field" type="text" id="hp_website_dq" name="website" tabindex="-1" autocomplete="off" />
-              <input class="field" type="text"  id="fname-dq" placeholder="First name" autocomplete="given-name" />
-              <input class="field" type="email" id="email-dq" placeholder="Email address" autocomplete="email" inputmode="email" />
-              <span class="field-error-msg" id="err-dq">Please enter your first name and a valid email.</span>
-            </div>
-            <button class="btn-next" id="btn-dq" type="button">
-              SEND ME THE BLUEPRINT
+            <div class="dq-icon">🙏</div>
+            <div class="quiz-q">This may not be the right fit just yet.</div>
+            <p class="dq-text">Our projects typically require a minimum of $200k in available capital or equity. If you're not quite there yet, the blueprint is still worth downloading — it'll show you exactly what to build toward so you're ready when the time comes.</p>
+            <a class="btn-next" href="blueprint.html" style="text-decoration:none;display:flex;">
+              DOWNLOAD THE BLUEPRINT ANYWAY
               <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h9M8.5 3.5l4 4-4 4"/></svg>
-            </button>
+            </a>
             <button class="btn-back" id="btn-back-dq" type="button">← Go back</button>
-            <p class="recaptcha-note">Protected by reCAPTCHA. Google <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms</a> apply.</p>
           </div>
         </div>
 
@@ -614,7 +607,8 @@
             <div class="quiz-q">Where should we send your free blueprint?</div>
             <div class="field-group">
               <input class="hp-field" type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off" />
-              <input class="field" type="text"  id="fullname" placeholder="Full name" autocomplete="name" />
+              <input class="field" type="text" id="fname" placeholder="First name" autocomplete="given-name" />
+              <input class="field" type="text" id="lname" placeholder="Last name" autocomplete="family-name" />
               <input class="field" type="email" id="email" placeholder="Email address" autocomplete="email" inputmode="email" />
               <input class="field" type="tel"   id="phone" placeholder="Mobile number" autocomplete="tel" inputmode="tel" />
               <span class="field-error-msg" id="err-phone">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
@@ -943,22 +937,18 @@
     function getVal(id) { return document.getElementById(id).value.trim(); }
     const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
-    function splitName(full) {
-      const parts = full.split(/\s+/).filter(Boolean);
-      return { fname: parts.shift() || '', lname: parts.join(' ') };
-    }
-
     function validateContact() {
       if (document.getElementById('hp_website').value) return null; // honeypot
-      ['fullname', 'email', 'phone'].forEach(id => document.getElementById(id).classList.remove('error'));
+      ['fname', 'lname', 'email', 'phone'].forEach(id => document.getElementById(id).classList.remove('error'));
       document.getElementById('err-phone').classList.remove('show');
 
-      const fullname = getVal('fullname'), email = getVal('email'), phone = getVal('phone');
+      const fname = getVal('fname'), lname = getVal('lname'), email = getVal('email'), phone = getVal('phone');
       const stripped = phone.replace(/[\s\-().]/g, '');
       const auPhone  = /^(\+?61|0)(4\d{8}|[2378]\d{8})$/.test(stripped);
 
       const errs = [];
-      if (!fullname)       errs.push('fullname');
+      if (!fname)          errs.push('fname');
+      if (!lname)          errs.push('lname');
       if (!emailOk(email)) errs.push('email');
       if (!auPhone)        errs.push('phone');
       if (errs.length) {
@@ -966,27 +956,13 @@
         const msg = document.getElementById('err-phone');
         msg.textContent = (errs.length === 1 && errs[0] === 'phone')
           ? 'Please enter a valid Australian phone number (e.g. 0412 345 678)'
-          : 'Please fill in all three fields so we can send your blueprint.';
+          : 'Please fill in all fields so we can send your blueprint.';
         msg.classList.add('show');
         document.getElementById(errs[0]).focus();
         return null;
       }
 
-      const { fname, lname } = splitName(fullname);
       return { fname, lname, email, phone };
-    }
-
-    function validateDq() {
-      if (document.getElementById('hp_website_dq').value) return null;
-      ['fname-dq', 'email-dq'].forEach(id => document.getElementById(id).classList.remove('error'));
-      document.getElementById('err-dq').classList.remove('show');
-
-      const fname = getVal('fname-dq'), email = getVal('email-dq');
-      let valid = true;
-      if (!fname) { document.getElementById('fname-dq').classList.add('error'); valid = false; }
-      if (!emailOk(email)) { document.getElementById('email-dq').classList.add('error'); valid = false; }
-      if (!valid) { document.getElementById('err-dq').classList.add('show'); return null; }
-      return { fname, lname: '', email, phone: '' };
     }
 
     async function getRecaptchaToken() {
@@ -1053,20 +1029,8 @@
       });
     });
 
-    document.getElementById('btn-dq').addEventListener('click', () => {
-      const fields = validateDq();
-      if (!fields) return;
-      submitToGHL(fields, document.getElementById('btn-dq'), {
-        capital:  checked('options-step3'),
-        timeline: checked('options-step2'),
-        goal:     checked('options-step1'),
-        nurture:  true,
-        redirect: 'blueprint.html',
-      });
-    });
-
     // Enter key submits the visible contact step
-    [['step-4', 'btn-step4'], ['step-dq', 'btn-dq']].forEach(([stepId, btnId]) => {
+    [['step-4', 'btn-step4']].forEach(([stepId, btnId]) => {
       document.getElementById(stepId).querySelectorAll('.field').forEach(f => {
         f.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); document.getElementById(btnId).click(); } });
       });
