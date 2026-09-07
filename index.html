@@ -1033,6 +1033,12 @@
         console.warn('Pixel Lead event error:', err);
       }
 
+      // Hand the details to the booking page (same origin, never in the URL)
+      // so the calendar widget can be prefilled instead of asking again.
+      try {
+        sessionStorage.setItem('ks_lead', JSON.stringify({ fname: fields.fname, lname: fields.lname, email: fields.email, phone: fields.phone }));
+      } catch (e) { /* private mode etc. — booking page falls back to an empty widget */ }
+
       btnEl.innerHTML = originalText;
       // Small delay so the pixel's beacon has a moment to leave before navigation.
       setTimeout(() => { window.location.href = redirect; }, 150);

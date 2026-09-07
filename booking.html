@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book Your Strategy Call — Keyspace Property</title>
   <!-- Meta Pixel Code -->
   <script>
@@ -344,6 +344,45 @@
       color: var(--black);
     }
 
+    /* ── Blueprint link (secondary, below the calendar) ── */
+    .bp-link {
+      margin-top: 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .bp-link-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .bp-link-text strong { display: block; font-family: var(--font-h); font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
+    .bp-link a {
+      flex-shrink: 0;
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 1px;
+      white-space: nowrap;
+      transition: opacity .15s ease;
+    }
+    .bp-link a:hover, .bp-link a:focus-visible { opacity: .7; outline: none; }
+
+    /* Numbered list items (matches the landing page) */
+    .next-num {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 900;
+      color: #cfcfcf;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 28px;
+    }
+
     /* ── Call Details ───────────────────────────── */
     .details-section {
       background: var(--white);
@@ -366,7 +405,8 @@
       gap: 10px;
     }
 
-    .detail-icon { font-size: 18px; flex-shrink: 0; }
+    .detail-card h5 { text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--muted); }
+    .detail-card p { font-family: var(--font-h); font-weight: 700; color: var(--black); font-size: 14px; }
 
     .detail-card h5 {
       font-family: var(--font-h);
@@ -493,63 +533,86 @@
 
   <!-- Confirmation Banner -->
   <div class="confirm-banner">
-    <div class="confirm-icon">🎉</div>
-    <h1>Blueprint on its way, <span id="name-display">Investor</span>!</h1>
-    <p>Now book your free 30-minute strategy call and let's map out your exact investment path.</p>
+    <h1>Your blueprint is on its way, <span id="name-display">Investor</span>.</h1>
+    <p>It'll reach you by text and email in the next couple of minutes. While you're here, lock in a free 30-minute call and we'll run the numbers on your situation.</p>
   </div>
 
-  <!-- What Happens Next -->
-  <section class="next-section">
-    <div class="wrap">
-      <div class="reveal">
-        <div class="section-label">What Happens Next</div>
-        <h2 class="section-h2">On your call, we'll cover</h2>
-      </div>
-      <div class="next-list reveal-stagger">
-        <div class="next-item">
-          <div class="next-icon">🎯</div>
-          <div class="next-content">
-            <h4>Your personal investment roadmap</h4>
-            <p>We'll assess your position and show you the most direct path to ownership.</p>
-          </div>
-        </div>
-        <div class="next-item">
-          <div class="next-icon">🏘️</div>
-          <div class="next-content">
-            <h4>Live project opportunities</h4>
-            <p>Get access to current sites before they're presented to the wider market.</p>
-          </div>
-        </div>
-        <div class="next-item">
-          <div class="next-icon">💰</div>
-          <div class="next-content">
-            <h4>Finance strategy tailored to you</h4>
-            <p>Understand how to structure your deal to maximise yield and protect equity.</p>
-          </div>
-        </div>
-        <div class="next-item">
-          <div class="next-icon">💬</div>
-          <div class="next-content">
-            <h4>All your questions answered</h4>
-            <p>Ask anything — yields, timelines, compliance, management. No jargon.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Calendly Embed -->
+  <!-- Booking calendar -->
   <section class="cal-section">
     <div class="wrap">
       <div class="cal-card reveal">
         <div class="cal-header">
-          <h3>Book Your Free Strategy Call</h3>
+          <h3>Book your free strategy call</h3>
           <p>30 minutes · Phone or video · No obligation</p>
         </div>
 
-        <iframe src="https://app.keyspaceproperty.com.au/widget/booking/1sGknzKjcAVuYiOAJCBw" style="width:100%;height:700px;border:none;overflow:hidden;display:block;" scrolling="no" id="1sGknzKjcAVuYiOAJCBw_1774594215166"></iframe>
+        <iframe data-base="https://app.keyspaceproperty.com.au/widget/booking/1sGknzKjcAVuYiOAJCBw" style="width:100%;height:700px;border:none;overflow:hidden;display:block;" scrolling="no" id="1sGknzKjcAVuYiOAJCBw_1774594215166" title="Book your strategy call"></iframe>
+        <script>
+          // Prefill the calendar with the details the visitor just gave on the
+          // previous page, so they don't have to type them a second time.
+          (function () {
+            const frame = document.getElementById('1sGknzKjcAVuYiOAJCBw_1774594215166');
+            let src = frame.dataset.base;
+            try {
+              const lead = JSON.parse(sessionStorage.getItem('ks_lead') || 'null');
+              if (lead && lead.email) {
+                const phone = (lead.phone || '').replace(/[\s\-().]/g, '').replace(/^0/, '+61');
+                src += '?' + new URLSearchParams({ first_name: lead.fname || '', last_name: lead.lname || '', email: lead.email, phone });
+              }
+            } catch (e) { /* fall back to the empty widget */ }
+            frame.src = src;
+          })();
+        </script>
         <script src="https://app.keyspaceproperty.com.au/js/form_embed.js" type="text/javascript"></script>
 
+      </div>
+
+      <div class="bp-link reveal">
+        <div class="bp-link-text">
+          <strong>Want to read the blueprint now?</strong>
+          It opens in a new tab, so your booking stays right here.
+        </div>
+        <a href="blueprint.html" target="_blank" rel="noopener">Open it →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we'll cover -->
+  <section class="next-section">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">On the call</div>
+        <h2 class="section-h2">What we'll cover in 30 minutes</h2>
+      </div>
+      <div class="next-list reveal-stagger">
+        <div class="next-item">
+          <div class="next-num">01</div>
+          <div class="next-content">
+            <h4>Where you stand right now</h4>
+            <p>Your usable equity, borrowing capacity and what's realistic in the next 12 months.</p>
+          </div>
+        </div>
+        <div class="next-item">
+          <div class="next-num">02</div>
+          <div class="next-content">
+            <h4>What a project would look like for you</h4>
+            <p>Rooms, location, build cost and projected weekly rent, using the same numbers as the blueprint.</p>
+          </div>
+        </div>
+        <div class="next-item">
+          <div class="next-num">03</div>
+          <div class="next-content">
+            <h4>How it gets funded</h4>
+            <p>The finance structures in the blueprint, applied to your position.</p>
+          </div>
+        </div>
+        <div class="next-item">
+          <div class="next-num">04</div>
+          <div class="next-content">
+            <h4>Whether it's the right fit</h4>
+            <p>If it isn't, we'll tell you straight. No pitch, no pressure.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -559,31 +622,27 @@
     <div class="wrap">
       <div class="details-grid reveal-stagger">
         <div class="detail-card">
-          <div class="detail-icon">📞</div>
           <div>
             <h5>Format</h5>
-            <p>Phone or video — your choice</p>
+            <p>Phone or video, your choice</p>
           </div>
         </div>
         <div class="detail-card">
-          <div class="detail-icon">⏱️</div>
           <div>
             <h5>Duration</h5>
             <p>30 minutes</p>
           </div>
         </div>
         <div class="detail-card">
-          <div class="detail-icon">💵</div>
           <div>
             <h5>Cost</h5>
             <p>Completely free</p>
           </div>
         </div>
         <div class="detail-card">
-          <div class="detail-icon">👤</div>
           <div>
             <h5>With</h5>
-            <p>Senior Keyspace advisor</p>
+            <p>A senior Keyspace advisor</p>
           </div>
         </div>
       </div>
@@ -592,17 +651,16 @@
 
   <!-- Zero Pressure Guarantee -->
   <div class="guarantee-section">
-    <div class="g-icon">🛡️</div>
-    <h4>Zero Pressure Guarantee</h4>
-    <p>No pitch. No close. No pressure. Just honest advice on what's possible for your situation.</p>
+    <h4>No pitch. No pressure.</h4>
+    <p>The call is there to work out whether a rooming house makes sense for you. If it doesn't, we'll say so.</p>
   </div>
 
   <!-- Trust Strip -->
   <div class="trust-strip">
     <div class="trust-inner">
-      <div class="trust-item">🔒 Secure &amp; private</div>
-      <div class="trust-item">⚡ Instant confirmation</div>
-      <div class="trust-item">🚫 Cancel anytime</div>
+      <div class="trust-item">5.0 Google rating</div>
+      <div class="trust-item">50+ properties delivered</div>
+      <div class="trust-item">Cancel or reschedule anytime</div>
     </div>
   </div>
 
@@ -614,14 +672,14 @@
       <a href="#">Terms</a>
       <a href="index.html">← Back</a>
     </div>
-    <p class="footer-copy">© 2025 Keyspace Property Group. All rights reserved.</p>
+    <p class="footer-copy">© 2026 Keyspace Property Group. All rights reserved.</p>
   </footer>
 
   <script>
     // Personalised greeting
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
-    if (name) document.getElementById('name-display').textContent = name + '!';
+    if (name) document.getElementById('name-display').textContent = name;
 
     // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
