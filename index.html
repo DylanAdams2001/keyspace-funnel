@@ -29,6 +29,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="ad-assets/bedroom.jpg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -246,6 +248,18 @@
     .field-error-msg { font-size: 11px; color: var(--error); margin-top: -6px; display: none; }
     .field-error-msg.show { display: block; }
     .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; }
+
+    /* Phone country picker (intl-tel-input) — matched to .field styling */
+    .iti { width: 100%; }
+    .iti__flag-container { border-right: 1.5px solid var(--border); }
+    .iti input.field {
+      width: 100%;
+      padding-left: 92px !important;
+    }
+    .iti.iti--allow-dropdown .iti__flag-container:hover { background: #f8f8f8; }
+    .field-wrap.error .iti input.field { border-color: var(--error); box-shadow: 0 0 0 3px rgba(224,32,32,.08); animation: shake .3s ease; }
+    .field-wrap.error .iti__selected-flag { border-color: var(--error); }
+    .iti__country-list { font-family: var(--font-b); font-size: 14px; border-radius: var(--radius); border-color: var(--border); }
 
     .btn-next {
       width: 100%;
@@ -610,7 +624,7 @@
               <input class="field" type="text" id="fname" placeholder="First name" autocomplete="given-name" />
               <input class="field" type="text" id="lname" placeholder="Last name" autocomplete="family-name" />
               <input class="field" type="email" id="email" placeholder="Email address" autocomplete="email" inputmode="email" />
-              <input class="field" type="tel"   id="phone" placeholder="Mobile number" autocomplete="tel" inputmode="tel" />
+              <div class="field-wrap" id="phone-wrap"><input class="field" type="tel" id="phone" placeholder="Mobile number" autocomplete="tel" inputmode="tel" /></div>
               <span class="field-error-msg" id="err-phone">Please enter a valid Australian phone number (e.g. 0412 345 678)</span>
             </div>
             <button class="btn-next" id="btn-step4" type="button">
@@ -934,33 +948,46 @@
     const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/q6eq2jrEH8uxVEdsviAV/webhook-trigger/04e3f4f0-c379-4e4e-b309-d6651f692e0e';
     const RECAPTCHA_KEY   = '6Lffh8AsAAAAAJnZzFwltMyJsKxFLeOCT3Y-o17z';
 
+    // Country defaults to Australia and never changes based on the visitor's
+    // network, SIM or location — only an explicit tap on the flag changes it.
+    const phoneInput = window.intlTelInput(document.getElementById('phone'), {
+      initialCountry: 'au',
+      preferredCountries: ['au'],
+      separateDialCode: true,
+      utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
+    });
+
     function getVal(id) { return document.getElementById(id).value.trim(); }
     const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
     function validateContact() {
       if (document.getElementById('hp_website').value) return null; // honeypot
-      ['fname', 'lname', 'email', 'phone'].forEach(id => document.getElementById(id).classList.remove('error'));
+      ['fname', 'lname', 'email'].forEach(id => document.getElementById(id).classList.remove('error'));
+      document.getElementById('phone-wrap').classList.remove('error');
       document.getElementById('err-phone').classList.remove('show');
 
-      const fname = getVal('fname'), lname = getVal('lname'), email = getVal('email'), phone = getVal('phone');
-      const stripped = phone.replace(/[\s\-().]/g, '');
-      const auPhone  = /^(\+?61|0)(4\d{8}|[2378]\d{8})$/.test(stripped);
+      const fname = getVal('fname'), lname = getVal('lname'), email = getVal('email');
+      const rawPhoneDigits = getVal('phone').replace(/\D/g, '');
+      const phoneReady = typeof intlTelInputUtils !== 'undefined';
+      const phoneOk = phoneReady ? phoneInput.isValidNumber() : rawPhoneDigits.length >= 6;
+      const phone = phoneOk ? phoneInput.getNumber() : getVal('phone');
 
       const errs = [];
       if (!fname)          errs.push('fname');
       if (!lname)          errs.push('lname');
       if (!emailOk(email)) errs.push('email');
-      if (!auPhone)        errs.push('phone');
+      if (!phoneOk)        { errs.push('phone'); document.getElementById('phone-wrap').classList.add('error'); }
       if (errs.length) {
-        errs.forEach(id => document.getElementById(id).classList.add('error'));
+        errs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('error'); });
         const msg = document.getElementById('err-phone');
         msg.textContent = (errs.length === 1 && errs[0] === 'phone')
-          ? 'Please enter a valid Australian phone number (e.g. 0412 345 678)'
+          ? 'Please check your phone number and country'
           : 'Please fill in all fields so we can send your blueprint.';
         msg.classList.add('show');
-        document.getElementById(errs[0]).focus();
+        (document.getElementById(errs[0]) || document.getElementById('phone')).focus();
         return null;
       }
+      document.getElementById('phone-wrap').classList.remove('error');
 
       return { fname, lname, email, phone };
     }
